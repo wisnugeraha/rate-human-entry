@@ -16,7 +16,11 @@ def main():
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "w", encoding="utf-8") as f:
         f.write(ENTRY)
-    print(f'wrote {len(ENTRY)} chars to {out}')
+    # Re-read to confirm the artifact on disk is exactly what we wrote.
+    with open(out, encoding="utf-8") as f:
+        on_disk = f.read()
+    assert on_disk == ENTRY, 'artifact does not match ENTRY'
+    print(f'wrote {len(ENTRY)} chars to {out} (gate ok: {1 <= len(on_disk) <= 200 and on_disk.strip()})')
 
 if __name__ == "__main__":
     main()
